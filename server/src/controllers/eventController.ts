@@ -1,4 +1,4 @@
-﻿import { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { Event } from '../models/Event';
 import { User } from '../models/User';
 
