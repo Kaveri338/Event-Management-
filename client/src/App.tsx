@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
@@ -10,10 +10,7 @@ import api from './services/api';
 
 function App() {
   useEffect(() => {
-    // Ping the backend as soon as the app loads to "wake it up" (Render Free Tier)
-    api.get('/').catch(() => {
-        // We don't care about the error, we just want to wake it up
-    });
+    api.get('/').catch(() => {});
   }, []);
 
   return (
@@ -32,7 +29,7 @@ function App() {
           </div>
         </main>
         <footer className="py-8 text-center text-gray-500 text-sm">
-          � 2026 EventHub Platform. All rights reserved.
+          © 2026 EventHub Platform. All rights reserved.
         </footer>
       </div>
     </Router>

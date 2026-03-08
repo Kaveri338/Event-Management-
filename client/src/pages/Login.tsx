@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ï»¿import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../services/api';
 import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react';
@@ -12,7 +12,7 @@ const Login = () => {
   useEffect(() => {
     let timer: any;
     if (loading) {
-      timer = setTimeout(() => setShowWakeMsg(true), 3000); // Show msg after 3s
+      timer = setTimeout(() => setShowWakeMsg(true), 3000); 
     } else {
       setShowWakeMsg(false);
     }
@@ -63,7 +63,7 @@ const Login = () => {
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-indigo-400" size={18} />
               <input
                 type="password"
-                placeholder="••••••••"
+                placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                 className="w-full bg-gray-900 border border-gray-700 rounded-xl py-3 pl-10 pr-4 focus:outline-none focus:border-indigo-500 transition-all text-white placeholder-gray-600 shadow-sm"
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
