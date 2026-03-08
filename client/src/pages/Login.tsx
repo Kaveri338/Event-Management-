@@ -28,7 +28,11 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/');
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Login failed');
+      // Better error reporting
+      const errorMsg = err.response?.data?.error || err.message || 'Login failed';
+      const status = err.response?.status ? `(${err.response.status})` : '';
+      alert(`Login Error ${status}: ${errorMsg}`);
+      console.error('Detailed Login Error:', err);
     } finally {
       setLoading(false);
     }
