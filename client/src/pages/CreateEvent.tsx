@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { Calendar, MapPin, Users, Tag, Image as ImageIcon, FileText, Loader2, Save } from 'lucide-react';
@@ -8,7 +8,18 @@ const CreateEvent = () => {
     title: '', description: '', date: '', location: '', capacity: 10, category: 'Technology', image: ''
   });
   const [loading, setLoading] = useState(false);
+  const [showWakeMsg, setShowWakeMsg] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let timer: any;
+    if (loading) {
+      timer = setTimeout(() => setShowWakeMsg(true), 3000); 
+    } else {
+      setShowWakeMsg(false);
+    }
+    return () => clearTimeout(timer);
+  }, [loading]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,11 +49,11 @@ const CreateEvent = () => {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">        
           <div className="space-y-1.5 md:col-span-2">
             <label className="text-sm font-medium text-gray-300 px-1">Event Title</label>
             <div className="relative">
-              <FileText className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <FileText className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />   
               <input
                 type="text"
                 placeholder="Ex: Tech Conference 2026"
@@ -66,7 +77,7 @@ const CreateEvent = () => {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-300 px-1">Date & Time</label>
             <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />   
               <input
                 type="datetime-local"
                 className={inputClass}
@@ -79,7 +90,7 @@ const CreateEvent = () => {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-300 px-1">Location</label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />     
               <input
                 type="text"
                 placeholder="Ex: San Francisco, CA"
@@ -93,13 +104,13 @@ const CreateEvent = () => {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-300 px-1">Capacity</label>
             <div className="relative">
-              <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <Users className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />      
               <input
                 type="number"
                 min="1"
                 placeholder="100"
                 className={inputClass}
-                onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) })}        
                 required
               />
             </div>
@@ -108,7 +119,7 @@ const CreateEvent = () => {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-gray-300 px-1">Category</label>
             <div className="relative">
-              <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <Tag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />        
               <select
                 className={`${inputClass} appearance-none cursor-pointer`}
                 onChange={(e) => setFormData({ ...formData, category: e.target.value })}
@@ -124,9 +135,9 @@ const CreateEvent = () => {
           </div>
 
           <div className="space-y-1.5 md:col-span-2">
-            <label className="text-sm font-medium text-gray-300 px-1">Image URL (Optional)</label>
+            <label className="text-sm font-medium text-gray-300 px-1">Image URL (Optional)</label>        
             <div className="relative">
-              <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+              <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />  
               <input
                 type="url"
                 placeholder="https://example.com/image.jpg"
@@ -142,8 +153,13 @@ const CreateEvent = () => {
               disabled={loading}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 group disabled:opacity-50"
             >
-              {loading ? <Loader2 className="animate-spin" /> : <><Save size={20} /> Launch Event</>}
+              {loading ? <Loader2 className="animate-spin" /> : <><Save size={20} /> Launch Event</>}     
             </button>
+            {showWakeMsg && (
+                <p className="text-center text-indigo-400 text-sm mt-4 animate-pulse">
+                    Server is waking up. This might take up to 60 seconds...
+                </p>
+            )}
           </div>
         </form>
       </div>

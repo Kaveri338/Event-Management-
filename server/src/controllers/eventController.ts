@@ -8,20 +8,20 @@ export const createEvent = async (req: any, res: Response) => {
     await event.save();
     await User.findByIdAndUpdate(req.user.id, { $push: { createdEvents: event._id } });
     res.status(201).send(event);
-  } catch (error) {
-    res.status(400).send(error);
+  } catch (error: any) {
+    console.error('Create Event Error:', error);
+    res.status(400).send({ error: error.message || 'Failed to create event' });
   }
 };
 
 export const getEvents = async (req: Request, res: Response) => {
   try {
-    // Populate organizer AND attendees with their name and email
     const events = await Event.find()
       .populate('organizer', 'name email')
       .populate('attendees', 'name email');
     res.send(events);
-  } catch (error) {
-    res.status(500).send(error);
+  } catch (error: any) {
+    res.status(500).send({ error: error.message });
   }
 };
 
@@ -36,7 +36,7 @@ export const registerForEvent = async (req: any, res: Response) => {
     await event.save();
     await User.findByIdAndUpdate(req.user.id, { $push: { registeredEvents: event._id } });
     res.send(event);
-  } catch (error) {
-    res.status(400).send(error);
+  } catch (error: any) {
+    res.status(400).send({ error: error.message });
   }
 };
