@@ -1,4 +1,4 @@
-﻿import express from 'express';
+import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -10,46 +10,36 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Improved CORS for production
+app.use(cors({
+  origin: '*', // Allow all for now; you can specify your Vercel URL later
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
-console.log('--- Server Startup ---');
-console.log('PORT:', PORT);
-
-const rawUri = process.env.MONGO_URI || '';
-if (rawUri) {
-    const masked = rawUri.replace(/:([^@]+)@/, ':****@');
-    console.log('Using MONGO_URI:', masked);
-    if (rawUri.includes(' ')) console.log('⚠️ WARNING: MONGO_URI contains spaces!');
-} else {
-    console.log('❌ ERROR: MONGO_URI is missing from environment variables!');
-}
-
-app.use('/api/auth', authRoutes);
-app.use('/api/events', eventRoutes);
+// Request logger to see hits in Render Logs
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
 
 app.get('/', (req, res) => {
   res.send('Event Management Platform API is running');
 });
 
-const MONGO_URI = rawUri || 'mongodb://127.0.0.1:27017/event-platform';
+app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
 
-console.log('Connecting to MongoDB...');
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/event-platform';
 
-mongoose.connect(MONGO_URI, {
-    serverSelectionTimeoutMS: 10000, // Wait 10s before failing
-})
+mongoose.connect(MONGO_URI)
   .then(() => {
-    console.log('✅ Connected to MongoDB Successfully!');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server is running on port ${PORT}`);
-    });
+    console.log('✅ Connected to MongoDB');
+    app.listen(PORT, () => console.log(`🚀 Server on port ${PORT}`));
   })
-  .catch((error) => {
-    console.error('❌ MongoDB connection error:', error.message);
-    // Log more details if it's a timeout
-    if (error.message.includes('Server selection timed out')) {
-        console.log('👉 Tip: This usually means your IP is not whitelisted in MongoDB Atlas.');
-    }
+  .catch(err => {
+    console.error('❌ MongoDB Error:', err.message);
     process.exit(1);
   });
