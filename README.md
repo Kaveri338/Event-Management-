@@ -1,8 +1,4 @@
-﻿# Multi-Event Management Platform
-
-A modern, full-stack event management platform built for hackathons, allowing organizers to create and manage events while attendees can discover and register for them.
-
-## Idea Description
+﻿## Idea Description
 
 ### The Problem
 Organizing and participating in hackathons or technical workshops often involves navigating fragmented platforms, leading to missed opportunities for attendees and administrative overhead for organizers. Many existing solutions lack a unified interface that balances simplicity with the robust role-based functionality required for multi-event management. This fragmentation results in lower engagement and a steep learning curve for new community members.
@@ -120,4 +116,5 @@ cd event-management-platform
 ### 4. Access the Application
 - **Frontend:** [http://localhost:5173](http://localhost:5173)
 - **Backend API:** [http://localhost:5000](http://localhost:5000)
+
 
